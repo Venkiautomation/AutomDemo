@@ -1,0 +1,95 @@
+buildscript
+        {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+plugins {
+    id 'java'
+}
+
+apply plugin:'idea'
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+allprojects {apply plugin: "idea"}
+
+sourceCompatibility=1.8
+
+def task = task label {
+
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "welcome to automation project"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+    println "---------------------"
+
+}
+task
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.bodar.com/"
+    }
+}
+
+dependencies {
+    implementation group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
+    implementation 'io.cucumber:cucumber-java:7.11.2'
+    testImplementation 'io.cucumber:cucumber-junit:5.6.0'
+//    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+    implementation("io.github.bonigarcia:webdrivermanager:5.1.0")
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    implementation 'joda-time:joda-time:2.12.5'
+
+
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+tasks.register('testAuto') {
+    def argsSkip= 'not @pending and @wip'
+//    def tags=argsSkip + ' and ' + testTags + ''
+//    +' and ' + argsSkip
+//    println('final args are '+tags)
+    dependsOn assemble,testClasses,compileTestJava
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'json:target/cucumber.json',
+                    '--plugin', 'junit:target/junit-report.xml',
+                    '--glue', 'com.venki.auto', 'src/test/resources',
+                    '--tags', testTags]
+            systemProperties System.properties
+            systemProperty "testTags", testTags
+            systemProperty "browser", browser
+//            systemProperty "testTags", System.getProperty("testTags")
+//            systemProperty "browser", System.getProperty("browser")
+//            systemProperty "job.runtime", System.getProperty("job.runtime")
+
+            systemProperty "java.util.logging.SimpleFormatter.format", "%1\$tY-%1\$tm-%1\$td %1\$tH:%1\$tM:%1\$tS %4\$s %2\$s %5\$s%6\$s%n"
+        }
+    }
+//    useJUnitPlatform()
+}
