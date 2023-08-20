@@ -1,6 +1,7 @@
 package com.venki.auto.utils;
 
 import io.cucumber.java.AfterAll;
+import io.cucumber.java.Before;
 import io.cucumber.java.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,6 +20,11 @@ import java.util.logging.Logger;
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         logger.info("Initializing the browser");
         driver = new ChromeDriver();
+    }
+
+    @Before(order=0)
+    public static void before(){
+
     }
 
     @AfterAll

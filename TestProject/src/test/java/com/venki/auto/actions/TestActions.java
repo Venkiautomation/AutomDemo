@@ -3,17 +3,23 @@ package com.venki.auto.actions;
 import com.venki.auto.utils.BrowserFactory;
 import com.venki.auto.utils.Objects.Elements;
 import com.venki.auto.utils.Setup;
+import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class TestActions {
       BrowserFactory browserFactory=new BrowserFactory();
+
+      List<Map<String, String>> list;
+
       public void enterUrl() throws Exception {
             try {
                   browserFactory.navigateToUrl("http://localhost:3000/");
@@ -25,7 +31,7 @@ public class TestActions {
 
       public void checkIfElemetIsDisplayed(By by){
             boolean value = browserFactory.isElelmentDisplayed(by);
-            if (value==true){
+            if (value){
                   System.out.println("element is present");
             }
             else {
@@ -44,6 +50,7 @@ public class TestActions {
       public void goToMonth(int number,By by){
             for (int i=0;i<number;i++){
                   browserFactory.clickElement(by);
+                  validateCalendarDaysOfmonth();
             }
       }
 
@@ -74,12 +81,81 @@ public class TestActions {
       }
 
       public void validateBlueCircle(){
-            String text = browserFactory.getText(By.xpath(Elements.blueCircle));
+            String text = browserFactory.getText(By.cssSelector(Elements.blueCircle));
             System.out.println("The date highlighted is "+text);
             Date dt = new Date();
             Assert.assertEquals(dt.getDate(),Integer.parseInt(text));
       }
 
+      public void login(String type) throws Exception {
+            String username=getValueFromProp("userName1");
+            String password=getValueFromProp("password1");
+//            browserFactory.sendKeys(By.id(""),username);
+//            browserFactory.sendKeys(By.id(""),password);
+            System.out.println("Successfully logged in with username "+username +"and password "+password);
+      }
+      public void createEvent(DataTable dataTable) throws InterruptedException {
+             this.list = dataTable.asMaps();
+            System.out.println("Size of list is "+list.size());
+            for (Map<String,String>value:list) {
+                  traverseToMonth(value.get("Month"));
+                  WebElement date = getDate(value.get("Date"));
+                  date.click();
+                  browserFactory.sendKeys(By.cssSelector(Elements.eventTextField),value.get("Event Name"));
+                  browserFactory.sendKeys(By.cssSelector(Elements.eventdescription),value.get("Description"));
+                  browserFactory.clickElement(By.xpath(Elements.getLabelElement(value.get("Label Color"))));
+                  browserFactory.clickElement(By.cssSelector(Elements.eventSaveButton));
+
+            }
+            Thread.sleep(3000);
+      }
+      public WebElement getDate(String input){
+            List<WebElement> dates = browserFactory.getListOfWebElements(By.xpath(Elements.listOfdates));
+            List<WebElement> cursor = browserFactory.getListOfWebElements(By.xpath(Elements.cursor));
+            WebElement element=null;
+             for(int i=0;i<dates.size();i++) {
+                  if (dates.get(i).getText().equalsIgnoreCase(input)) {
+                        element = cursor.get(i);
+                  }
+             }
+            return element;
+      }
+      public void traverseToMonth(String month){
+            if (month.equalsIgnoreCase("current")){
+                  System.out.println("You are already in current month");
+            } else if (month.equalsIgnoreCase("next")) {
+                  System.out.println("navigating to next month");
+                  browserFactory.clickElement(By.xpath(Elements.mainMonthRighttButton));
+            } else if (month.equalsIgnoreCase("previous")) {
+                  System.out.println("navigating to previous month");
+                  browserFactory.clickElement(By.xpath(Elements.mainMonthLeftButton));
+            }
+      }
+
+      public void validateEventCreation(){
+            int count=0;
+            for (Map<String,String>value:this.list){
+                  System.out.println("The eventCard name is "+browserFactory.getListOfWebElements(By.xpath(Elements.eventCard)).get(count).getText());
+                  Assert.assertEquals(value.get("Event Name"),(browserFactory.getListOfWebElements(By.xpath(Elements.eventCard)).get(count).getText()));
+                  count++;
+            }
+      }
+      public void validateColorOfLabel(String color){
+            if (color.equalsIgnoreCase("red")){
+                  for (WebElement element:browserFactory.getListOfWebElements(By.xpath(Elements.eventCard))){
+                        String c=Color.fromString(element.getCssValue("background-color")).asRgba();
+//                        String c = Color.fromString(browserFactory.getCssValue(By.xpath(Elements.eventCard), "background-color")).asRgba();
+                        System.out.println("The rgb value is "+ c);
+                        Assert.assertEquals("rgba(254, 202, 202, 1)",c);
+                  }
+
+            }
+            else {
+                  throw new RuntimeException("Plz Implement other validations");
+            }
+
+      }
 
 
 }
+

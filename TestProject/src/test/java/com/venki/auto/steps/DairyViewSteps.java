@@ -11,7 +11,7 @@ import org.openqa.selenium.By;
 
 import java.util.Date;
 
-public class TestSteps {
+public class DairyViewSteps {
     TestActions testActions=new TestActions();
     @Given("I launch the browser")
     public void checkRun() {
@@ -24,9 +24,10 @@ public class TestSteps {
         }
 
     }
-    @Then("I enter the url and validate page is loaded")
+    @Then("I enter the url to the browser")
     public void stopBrowser() throws Exception {
         testActions.enterUrl();
+        Thread.sleep(3000);
     }
 
     @Then("I validate page is loaded")
@@ -34,15 +35,19 @@ public class TestSteps {
         testActions.checkIfElemetIsDisplayed(By.cssSelector(Elements.calendarName));
     }
 
-    @Given("I navigate {int} months {string} of current month")
+    @Given("I navigate {int} months {string} of current month and validate days of all month can be seen")
     public void moveToMonth(int i,String direction){
         if (direction.equalsIgnoreCase("ahead")){
             testActions.goToMonth(i,By.xpath(Elements.mainMonthRighttButton));
         }
-        else {
+        else if (direction.equalsIgnoreCase("behind")){
             testActions.goToMonth(i,By.xpath(Elements.mainMonthLeftButton));
         }
+        else {
+            throw new RuntimeException("Plz check the parameter passed");
+        }
         System.out.println("Month after navigating is "+testActions.getMainMonthText());
+
 
     }
 
@@ -87,6 +92,5 @@ public class TestSteps {
     public void validateBlueCircle(){
         testActions.validateBlueCircle();
     }
-
 
 }

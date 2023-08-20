@@ -61,4 +61,11 @@ public class BrowserFactory {
         List<WebElement> list = Setup.driver.findElements(by);
         return list;
     }
+    public void sendKeys(By by,String value){
+        Setup.driver.findElement(by).sendKeys(value);
+    }
+    public String getCssValue(By by,String cssValue){
+        String text = Setup.driver.findElement(by).getCssValue(cssValue);
+        return text;
+    }
 }
