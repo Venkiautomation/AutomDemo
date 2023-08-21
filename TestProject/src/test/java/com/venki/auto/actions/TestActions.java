@@ -132,7 +132,7 @@ public class TestActions {
             }
       }
 
-      public void validateEventCreation(){
+      public void  validateEventCreation(){
             int count=0;
             for (Map<String,String>value:this.list){
                   System.out.println("The eventCard name is "+browserFactory.getListOfWebElements(By.xpath(Elements.eventCard)).get(count).getText());
@@ -144,7 +144,6 @@ public class TestActions {
             if (color.equalsIgnoreCase("red")){
                   for (WebElement element:browserFactory.getListOfWebElements(By.xpath(Elements.eventCard))){
                         String c=Color.fromString(element.getCssValue("background-color")).asRgba();
-//                        String c = Color.fromString(browserFactory.getCssValue(By.xpath(Elements.eventCard), "background-color")).asRgba();
                         System.out.println("The rgb value is "+ c);
                         Assert.assertEquals("rgba(254, 202, 202, 1)",c);
                   }
@@ -154,6 +153,28 @@ public class TestActions {
                   throw new RuntimeException("Plz Implement other validations");
             }
 
+      }
+
+      public void deleteEvent(String name) throws InterruptedException {
+            for (WebElement element:browserFactory.getListOfWebElements(By.xpath(Elements.eventCard))){
+                  String text=element.getText();
+                  if (text.equalsIgnoreCase(name)){
+                        element.click();
+                        browserFactory.clickElement(By.cssSelector(Elements.deleteButton));
+                        Thread.sleep(3000);
+                  }
+            }
+      }
+
+      public void  deleteEventValidation(String name,int count){
+            for (WebElement element:browserFactory.getListOfWebElements(By.xpath(Elements.eventCard))){
+                  if (name.equalsIgnoreCase(element.getText())){
+                        Assert.fail();
+                  }
+            }
+            int listOfCards = browserFactory.getListOfWebElements(By.xpath(Elements.eventCard)).size();
+            System.out.println("Event count is "+listOfCards);
+            Assert.assertTrue(count==listOfCards);
       }
 
 

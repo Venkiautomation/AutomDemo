@@ -27,6 +27,9 @@ public class Elements {
     public static String cursor="//div[contains(@class,'cursor')]";//xpath
     public static String eventCard="//div[contains(@class,'p-1 mr-3')]";//xpath
 
+    public static String deleteButton="span[class=\"material-icons-outlined text-gray-400 cursor-pointer\"]";//css
+
+
 
 
 

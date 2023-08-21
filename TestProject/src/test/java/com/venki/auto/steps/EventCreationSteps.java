@@ -26,4 +26,6 @@ public class EventCreationSteps {
     public void validateEventCardColor(String color){
         testActions.validateColorOfLabel(color);
     }
+
+
 }
