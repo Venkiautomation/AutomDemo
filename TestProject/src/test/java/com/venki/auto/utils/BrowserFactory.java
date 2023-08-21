@@ -1,11 +1,19 @@
 package com.venki.auto.utils;
 
+import com.venki.auto.hooks.Setup;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -67,5 +75,24 @@ public class BrowserFactory {
     public String getCssValue(By by,String cssValue){
         String text = Setup.driver.findElement(by).getCssValue(cssValue);
         return text;
+    }
+
+    public Sheet getDataFromExcel(String fileName,String name) throws IOException {
+        File file =    new File("path to file");
+        FileInputStream inputStream = new FileInputStream(file);
+        Workbook excelBook = null;
+        String fileExtensionName = fileName.substring(fileName.indexOf("."));
+
+        if(fileExtensionName.equals(".xlsx")){
+            excelBook = new XSSFWorkbook(inputStream);
+        }
+
+        else if(fileExtensionName.equals(".xls")){
+            excelBook = new HSSFWorkbook(inputStream);
+        }
+        assert excelBook != null;
+        return excelBook.getSheet(name);
+
+
     }
 }

@@ -2,7 +2,7 @@ package com.venki.auto.actions;
 
 import com.venki.auto.utils.BrowserFactory;
 import com.venki.auto.utils.Objects.Elements;
-import com.venki.auto.utils.Setup;
+import com.venki.auto.hooks.Setup;
 import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -15,14 +15,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class TestActions {
+public class TestActions extends BrowserFactory {
       BrowserFactory browserFactory=new BrowserFactory();
 
       List<Map<String, String>> list;
 
       public void enterUrl() throws Exception {
             try {
-                  browserFactory.navigateToUrl("http://localhost:3000/");
+                  navigateToUrl("http://localhost:3000/");
             }
             catch (Exception e){
                   e.printStackTrace();
@@ -49,7 +49,7 @@ public class TestActions {
 
       public void goToMonth(int number,By by){
             for (int i=0;i<number;i++){
-                  browserFactory.clickElement(by);
+                  clickElement(by);
                   validateCalendarDaysOfmonth();
             }
       }

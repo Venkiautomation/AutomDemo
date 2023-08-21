@@ -1,7 +1,8 @@
-package com.venki.auto.utils;
+package com.venki.auto.hooks;
 
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.BeforeAll;
+import io.cucumber.java.Scenario;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
 
     @BeforeAll
     public static void beforeAll(){
+
         System.out.println("Browser type is"+System.getProperty("browser"));
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         logger.info("Initializing the browser");
@@ -23,7 +25,7 @@ import java.util.logging.Logger;
 
 
     @AfterAll
-    public static void afterAll(){
+    public static void afterAll(Scenario scenario){
         System.out.println("Tear down the scenario");
         driver.quit();
     }
