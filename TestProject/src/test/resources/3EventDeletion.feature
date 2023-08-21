@@ -1,6 +1,6 @@
 Feature: Event deletion from the calendar
 
-  @Test4 @sanity
+  @Test4 @sanity @After
   Scenario Outline: Check if authenticated user can create multiple event with past and future date
     Then I validate page is loaded
     Then I login using "valid" credentials

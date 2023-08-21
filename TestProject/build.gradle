@@ -54,7 +54,6 @@ dependencies {
     implementation("io.github.bonigarcia:webdrivermanager:5.1.0")
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     implementation 'joda-time:joda-time:2.12.5'
-//    implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.9'
 
 
@@ -85,9 +84,7 @@ tasks.register('testAuto') {
             systemProperties System.properties
             systemProperty "testTags", testTags
             systemProperty "browser", browser
-//            systemProperty "testTags", System.getProperty("testTags")
-//            systemProperty "browser", System.getProperty("browser")
-//            systemProperty "job.runtime", System.getProperty("job.runtime")
+            systemProperty "job.runtime", System.getProperty("job.runtime")
 
             systemProperty "java.util.logging.SimpleFormatter.format", "%1\$tY-%1\$tm-%1\$td %1\$tH:%1\$tM:%1\$tS %4\$s %2\$s %5\$s%6\$s%n"
         }

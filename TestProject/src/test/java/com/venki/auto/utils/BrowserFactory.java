@@ -1,11 +1,15 @@
 package com.venki.auto.utils;
 
 import com.venki.auto.hooks.Setup;
+import io.cucumber.java.Scenario;
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,7 +28,7 @@ public class BrowserFactory {
     public void clickOnElement(By by){
         Setup.driver.findElement(by).click();
     }
-
+     public static Scenario globalScenario;
     public void closeBrowser(){
         Setup.driver.close();
     }
@@ -93,6 +97,17 @@ public class BrowserFactory {
         assert excelBook != null;
         return excelBook.getSheet(name);
 
+
+    }
+
+    public static void attachScreenShot() throws IOException {
+        System.out.println("Taking screen shot");
+        byte[] ss = ((TakesScreenshot) Setup.driver).getScreenshotAs(OutputType.BYTES);
+        File s1 = ((TakesScreenshot) Setup.driver).getScreenshotAs(OutputType.FILE);
+        File DestFile=new File("./screenshot/screen.png");
+        FileUtils.copyFile(s1, DestFile);
+
+        globalScenario.attach(ss,"image/png","devansh");
 
     }
 }
