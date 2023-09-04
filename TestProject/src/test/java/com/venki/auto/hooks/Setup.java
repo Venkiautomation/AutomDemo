@@ -17,11 +17,12 @@ import java.util.logging.Logger;
     public static void before_All()throws Exception{
         System.out.println("Browser type is"+System.getProperty("browser"));
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        logger.info("Initializing the browser");
-        driver = new ChromeDriver();
+
     }
      @Before
      public void before(Scenario scenario){
+         logger.info("Initializing the browser");
+         driver = new ChromeDriver();
          BrowserFactory.globalScenario=scenario;
      }
 

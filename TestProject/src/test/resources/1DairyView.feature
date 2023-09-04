@@ -6,6 +6,7 @@ Feature: Dairy View of the calendar
     Then I validate page is loaded
     Given I navigate 12 months "behind" of current month and validate days of all month can be seen
     Then I validate that month has moved "behind" by 12
+    Then I validate main calendar and mini calendar values are same
     And I refresh the page
     Given I navigate 12 months "ahead" of current month and validate days of all month can be seen
     Then I validate that month has moved "ahead" by 12
