@@ -38,10 +38,15 @@ public class BrowserFactory {
         Setup.driver.manage().window().maximize();
     }
 
-    public String getValueFromPropertyFile(String value) throws Exception {
+    public String getValueFromPropertyFile(String value) {
         Properties props=new Properties();
-        FileReader reader=new FileReader(path);
-        props.load(reader);
+        try{
+            FileReader reader=new FileReader(path);
+            props.load(reader);
+        }
+      catch (Exception e){
+            e.printStackTrace();
+      }
         System.out.println("The value returned by property file is "+props.getProperty(value));
         String keyValue = props.getProperty(value).toString();
         return keyValue;
